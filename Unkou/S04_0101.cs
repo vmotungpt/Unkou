@@ -1,4 +1,6 @@
-﻿using System;
+﻿using C1.Win.C1FlexGrid;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Unkou.Common;
 
 namespace Unkou
 {
@@ -31,11 +34,11 @@ namespace Unkou
         /// <summary>
         /// 条件GroupBoxのTop座標
         /// </summary>
-        public const TopGbxCondition = 41;
+        public const int TopGbxCondition = 41;
         /// <summary>
         /// 条件GroupBoxのマージン
         /// </summary>
-        public const MarginGbxCondition = 6;
+        public const int MarginGbxCondition = 6;
 
         /// <summary>
         /// グリッド列タイトル_予約状況
@@ -192,7 +195,7 @@ namespace Unkou
             base.btnCom_Click(this.btnSearch, e);
 
             // log出力
-            createFactoryLog.logOutput(LogKindType.operationLog, ProcessKindType.search, ScreenName, "検索処理");
+            MessageBox.Show("Lỗi 検索処理");
         }
 
         /// <summary>
@@ -389,7 +392,7 @@ namespace Unkou
         {
 
             // 行ヘッダを作成
-            grdRiyouJininKakuteiRev.AllowDragging = (AllowDraggingEnum)false;
+            grdRiyouJininKakuteiRev.AllowDragging = false;
             grdRiyouJininKakuteiRev.AllowAddNew = false;
             grdRiyouJininKakuteiRev.AutoGenerateColumns = false;
             grdRiyouJininKakuteiRev.AllowEditing = false;
@@ -427,18 +430,18 @@ namespace Unkou
             cr = grdRiyouJininKakuteiRev.GetCellRange(0, 7, 0, 8);
             cr.Data = grgColTitleYoyakuNinzu;
             grdRiyouJininKakuteiRev.MergedRanges.Add(cr);
-            grdRiyouJininKakuteiRev(1, 7) = grdColTitleNyuukinAlready;
-            grdRiyouJininKakuteiRev(1, 8) = grdColTitleMiNyuukin;
+            //grdRiyouJininKakuteiRev(1, 7) = grdColTitleNyuukinAlready;
+            //grdRiyouJininKakuteiRev(1, 8) = grdColTitleMiNyuukin;
             // チェックイン状況
             cr = grdRiyouJininKakuteiRev.GetCellRange(0, 9, 0, 14);
             cr.Data = grdColTitleCheckinSituation;
             grdRiyouJininKakuteiRev.MergedRanges.Add(cr);
-            grdRiyouJininKakuteiRev(1, 9) = grdColTitleAlready;
-            grdRiyouJininKakuteiRev(1, 10) = grdColTitleKari;
-            grdRiyouJininKakuteiRev(1, 11) = grdColTitleMi;
-            grdRiyouJininKakuteiRev(1, 12) = grdColTitleNoShow;
-            grdRiyouJininKakuteiRev(1, 13) = grdColTitleCancel;
-            grdRiyouJininKakuteiRev(1, 14) = grdColTitleInfant;
+            //grdRiyouJininKakuteiRev(1, 9) = grdColTitleAlready;
+            //grdRiyouJininKakuteiRev(1, 10) = grdColTitleKari;
+            //grdRiyouJininKakuteiRev(1, 11) = grdColTitleMi;
+            //grdRiyouJininKakuteiRev(1, 12) = grdColTitleNoShow;
+            //grdRiyouJininKakuteiRev(1, 13) = grdColTitleCancel;
+            //grdRiyouJininKakuteiRev(1, 14) = grdColTitleInfant;
 
             // 利用人員
             cr = grdRiyouJininKakuteiRev.GetCellRange(0, 15, 1, 15);
@@ -546,134 +549,132 @@ namespace Unkou
         {
             base.reloadGrid();
 
-            // DBパラメータ
-            Hashtable paramInfoList = new Hashtable();
-            var dt = new DataTable();
+            // DBパラメータ TungPT
+            //Hashtable paramInfoList = new Hashtable();
+            //var dt = new DataTable();
 
-            // 日付(パラメータ)編集用変数
-            DateTime dteTmpDate = default(DateTime);
+            //// 日付(パラメータ)編集用変数
+            //DateTime dteTmpDate = default(DateTime);
 
-            // データアクセス
-            S04_0101_DA dataAccess = new S04_0101_DA();
-            DataTable dataRiyouJininList = new DataTable();
+            //// データアクセス 
+            //S04_0101_DA dataAccess = new S04_0101_DA();
+            //DataTable dataRiyouJininList = new DataTable();
 
-            // グリッド表示用dataRow
-            DataRow dr = null/* TODO Change to default(_) if this is not a reference type */;
-            // dt.NewRow
-            DataRow drX = null/* TODO Change to default(_) if this is not a reference type */;
+            //// グリッド表示用dataRow
+            //DataRow dr = null/* TODO Change to default(_) if this is not a reference type */;
+            //// dt.NewRow
+            //DataRow drX = null/* TODO Change to default(_) if this is not a reference type */;
 
-            TimeSpan SyuptTime = default(TimeSpan);
+            //TimeSpan SyuptTime = default(TimeSpan);
 
-            // パラメータ設定
-            // 乗車地コード
-            paramInfoList.Add("JyosyaTiCd", Trim(this.ucoJyosyaTiCd.CodeText));
+            //// パラメータ設定
+            //// 乗車地コード
+            //paramInfoList.Add("JyosyaTiCd", Trim(this.ucoJyosyaTiCd.CodeText));
 
-            // 出発日
-            paramInfoList.Add("SyuptDayFrom", Format(this.dtmSyuptDayFromTo.FromDateText, "yyyyMMdd"));
-            paramInfoList.Add("SyuptDayTo", Format(this.dtmSyuptDayFromTo.ToDateText, "yyyyMMdd"));
+            //// 出発日
+            //paramInfoList.Add("SyuptDayFrom", Format(this.dtmSyuptDayFromTo.FromDateText, "yyyyMMdd"));
+            //paramInfoList.Add("SyuptDayTo", Format(this.dtmSyuptDayFromTo.ToDateText, "yyyyMMdd"));
 
-            // コースコード
-            paramInfoList.Add("CrsCd", Trim(this.ucoCrsCd.CodeText));
+            //// コースコード
+            //paramInfoList.Add("CrsCd", Trim(this.ucoCrsCd.CodeText));
 
-            // 号車
-            paramInfoList.Add("Gousya", Trim(this.txtGousya.Text));
+            //// 号車
+            //paramInfoList.Add("Gousya", Trim(this.txtGousya.Text));
 
-            // 出発時間
-            if (!string.IsNullOrEmpty(dtmSyuptTime.Value.ToString) == true)
-            {
-                SyuptTime = (TimeSpan)this.dtmSyuptTime.Value;
-                paramInfoList.Add("SyuptTime", string.Concat(SyuptTime.Hours.ToString().PadLeft(2, '0'), SyuptTime.Minutes.ToString().PadLeft(2, '0')));
-            }
-            else
-                paramInfoList.Add("SyuptTime", Trim(this.dtmSyuptTime.Value.ToString));
+            //// 出発時間
+            //if (!string.IsNullOrEmpty(dtmSyuptTime.Value.ToString) == true)
+            //{
+            //    SyuptTime = (TimeSpan)this.dtmSyuptTime.Value;
+            //    paramInfoList.Add("SyuptTime", string.Concat(SyuptTime.Hours.ToString().PadLeft(2, '0'), SyuptTime.Minutes.ToString().PadLeft(2, '0')));
+            //}
+            //else
+            //    paramInfoList.Add("SyuptTime", Trim(this.dtmSyuptTime.Value.ToString));
 
-            // コース種別
-            // 日本語
-            paramInfoList.Add("Japanese", Trim(System.Convert.ToString(this.chkJapanese.Checked)));
-            // 外国語
-            paramInfoList.Add("Gaikokugo", Trim(System.Convert.ToString(this.chkGaikokugo.Checked)));
+            //// コース種別
+            //// 日本語
+            //paramInfoList.Add("Japanese", Trim(System.Convert.ToString(this.chkJapanese.Checked)));
+            //// 外国語
+            //paramInfoList.Add("Gaikokugo", Trim(System.Convert.ToString(this.chkGaikokugo.Checked)));
 
-            // コース区分
-            // 定期（昼）
-            paramInfoList.Add("TeikiNoon", Trim(System.Convert.ToString(this.chkTeikiNoon.Checked)));
-            // 定期（夜）
-            paramInfoList.Add("TeikiNight", Trim(System.Convert.ToString(this.chkTeikiNight.Checked)));
-            // 企画（日帰り）
-            paramInfoList.Add("KikakuDayTrip", Trim(System.Convert.ToString(this.chkKikakuDayTrip.Checked)));
-            // 企画（宿泊）
-            paramInfoList.Add("KikakuStay", Trim(System.Convert.ToString(this.chkKikakuStay.Checked)));
-            // 夜行
-            paramInfoList.Add("NightLine", Trim(System.Convert.ToString(this.chkNightLine.Checked)));
-            // 船舶
-            paramInfoList.Add("Boat", Trim(System.Convert.ToString(this.chkBoat.Checked)));
-            // ２泊以上
-            paramInfoList.Add("2StayMore", Trim(System.Convert.ToString(this.chk2StayMore.Checked)));
-            // Ｒコース
-            paramInfoList.Add("RCrs", Trim(System.Convert.ToString(this.chkRCrs.Checked)));
+            //// コース区分
+            //// 定期（昼）
+            //paramInfoList.Add("TeikiNoon", Trim(System.Convert.ToString(this.chkTeikiNoon.Checked)));
+            //// 定期（夜）
+            //paramInfoList.Add("TeikiNight", Trim(System.Convert.ToString(this.chkTeikiNight.Checked)));
+            //// 企画（日帰り）
+            //paramInfoList.Add("KikakuDayTrip", Trim(System.Convert.ToString(this.chkKikakuDayTrip.Checked)));
+            //// 企画（宿泊）
+            //paramInfoList.Add("KikakuStay", Trim(System.Convert.ToString(this.chkKikakuStay.Checked)));
+            //// 夜行
+            //paramInfoList.Add("NightLine", Trim(System.Convert.ToString(this.chkNightLine.Checked)));
+            //// 船舶
+            //paramInfoList.Add("Boat", Trim(System.Convert.ToString(this.chkBoat.Checked)));
+            //// ２泊以上
+            //paramInfoList.Add("2StayMore", Trim(System.Convert.ToString(this.chk2StayMore.Checked)));
+            //// Ｒコース
+            //paramInfoList.Add("RCrs", Trim(System.Convert.ToString(this.chkRCrs.Checked)));
 
-            // SQLでデータを取得
-            dataRiyouJininList = dataAccess.getRiyouJininList(paramInfoList);
+            //// SQLでデータを取得
+            //dataRiyouJininList = dataAccess.getRiyouJininList(paramInfoList);
 
-            // データ取得件数チェック
-            if (dataRiyouJininList.Rows.Count <= 0)
-            {
-                // 取得件数が0件の場合、エラー
+            //// データ取得件数チェック
+            //if (dataRiyouJininList.Rows.Count <= 0)
+            //{
+            //    // 取得件数が0件の場合、エラー
 
-                // [詳細エリア]検索結果部の項目初期化
-                initDetailAreaItems();
+            //    // [詳細エリア]検索結果部の項目初期化
+            //    initDetailAreaItems();
 
-                // 該当データが存在しません。
-                CommonProcess.createFactoryMsg().messageDisp("E90_019");
-            }
-            else
-            {
-                // データが取得できた場合
+            //    // 該当データが存在しません。
+            //    CommonProcess.createFactoryMsg().messageDisp("E90_019");
+            //}
+            //else
+            //{
+            //    // データが取得できた場合
 
-                // 列作成
-                dt.Columns.Add("colSyuptDay");           // 出発日
-                dt.Columns.Add("colJyosyaTi");           // 乗車地
-                dt.Columns.Add("colCrsCd");              // コースコード
-                dt.Columns.Add("colCrsName");            // コース名
-                dt.Columns.Add("colSyuptTime");          // 出発時間
-                dt.Columns.Add("colGousya");             // 号車
-                dt.Columns.Add("colNyuukinAlready");     // 入金済
-                dt.Columns.Add("colMiNyuukin");          // 未入金
-                dt.Columns.Add("colCheckinAlready");     // 済
-                dt.Columns.Add("colKariCheckin");        // 仮
-                dt.Columns.Add("colMiCheckin");          // 未
-                dt.Columns.Add("colNoShow");             // ＮｏＳｈｏｗ
-                dt.Columns.Add("colCancel");             // キャンセル
-                dt.Columns.Add("colInfant");             // インファント
-                dt.Columns.Add("colRiyouJinin");         // 利用人員
+            //    // 列作成
+            //    dt.Columns.Add("colSyuptDay");           // 出発日
+            //    dt.Columns.Add("colJyosyaTi");           // 乗車地
+            //    dt.Columns.Add("colCrsCd");              // コースコード
+            //    dt.Columns.Add("colCrsName");            // コース名
+            //    dt.Columns.Add("colSyuptTime");          // 出発時間
+            //    dt.Columns.Add("colGousya");             // 号車
+            //    dt.Columns.Add("colNyuukinAlready");     // 入金済
+            //    dt.Columns.Add("colMiNyuukin");          // 未入金
+            //    dt.Columns.Add("colCheckinAlready");     // 済
+            //    dt.Columns.Add("colKariCheckin");        // 仮
+            //    dt.Columns.Add("colMiCheckin");          // 未
+            //    dt.Columns.Add("colNoShow");             // ＮｏＳｈｏｗ
+            //    dt.Columns.Add("colCancel");             // キャンセル
+            //    dt.Columns.Add("colInfant");             // インファント
+            //    dt.Columns.Add("colRiyouJinin");         // 利用人員
 
-                // 取得した値を各列に設定
-                foreach (var dr in dataRiyouJininList.Rows)
-                {
-                    drX = dt.NewRow;
+            //    // 取得した値を各列に設定
+            //    foreach (var dr in dataRiyouJininList.Rows)
+            //    {
+            //        drX = dt.NewRow;
 
-                    drX("colSyuptDay") = Format(dr("SYUPT_DAY"), "yy/MM/dd");
-                    drX("colJyosyaTi") = dr("PLACE_NAME_SHORT");
-                    drX("colCrsCd") = dr("CRS_CD");
-                    drX("colCrsName") = dr("CRS_NAME");
-                    drX("colSyuptTime") = dr("SYUPT_TIME");
-                    drX("colGousya") = dr("GOUSYA");
-                    drX("colNyuukinAlready") = dr("NYUUKIN_ALREADY");
-                    drX("colMiNyuukin") = dr("MI_NYUUKIN");
-                    drX("colCheckinAlready") = 0;
-                    drX("colKariCheckin") = 0;
-                    drX("colMiCheckin") = dr("MI_CHECKIN");
-                    drX("colNoShow") = dr("NO_SHOW");
-                    drX("colCancel") = dr("CANCEL");
-                    drX("colInfant") = dr("INFANT");
-                    drX("colRiyouJinin") = dr("RIYOU_JININ");
+            //        drX("colSyuptDay") = Format(dr("SYUPT_DAY"), "yy/MM/dd");
+            //        drX("colJyosyaTi") = dr("PLACE_NAME_SHORT");
+            //        drX("colCrsCd") = dr("CRS_CD");
+            //        drX("colCrsName") = dr("CRS_NAME");
+            //        drX("colSyuptTime") = dr("SYUPT_TIME");
+            //        drX("colGousya") = dr("GOUSYA");
+            //        drX("colNyuukinAlready") = dr("NYUUKIN_ALREADY");
+            //        drX("colMiNyuukin") = dr("MI_NYUUKIN");
+            //        drX("colCheckinAlready") = 0;
+            //        drX("colKariCheckin") = 0;
+            //        drX("colMiCheckin") = dr("MI_CHECKIN");
+            //        drX("colNoShow") = dr("NO_SHOW");
+            //        drX("colCancel") = dr("CANCEL");
+            //        drX("colInfant") = dr("INFANT");
+            //        drX("colRiyouJinin") = dr("RIYOU_JININ");
 
-                    dt.Rows.Add(drX);
-                }
+            //        dt.Rows.Add(drX);
+            //    }
 
-                // グリッドに取得したデータを表示する
-                grdRiyouJininKakuteiRev.DataSource = dt;
-            }
+            //    // グリッドに取得したデータを表示する
+            //    grdRiyouJininKakuteiRev.DataSource = dt;
         }
     }
-
 }

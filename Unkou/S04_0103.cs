@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using Microsoft.VisualBasic;
+using System.ComponentModel;
+using System.Drawing;
+using Unkou.Common;
+using System.Data;
+using System.Collections;
 
 namespace Unkou
 {
@@ -14,194 +22,194 @@ namespace Unkou
     {
 
         /// <summary>
-        /// 画面PgmId
-        /// </summary>
+        ///     ''' 画面PgmId
+        ///     ''' </summary>
         private const string PgmId = "S04_0103";
         /// <summary>
-        /// 画面名
-        /// </summary>
+        ///     ''' 画面名
+        ///     ''' </summary>
         private const string ScreenName = "船車券AGT乗車確認出力";
         /// <summary>
-        /// 条件GroupBoxのTop座標
-        /// </summary>
-        public const TopGbxCondition = 41;
+        ///     ''' 条件GroupBoxのTop座標
+        ///     ''' </summary>
+        public const int TopGbxCondition = 41;
         /// <summary>
-        /// 条件GroupBoxのマージン
-        /// </summary>
-        public const MarginGbxCondition = 6;
+        ///     ''' 条件GroupBoxのマージン
+        ///     ''' </summary>
+        public const int MarginGbxCondition = 6;
         /// <summary>
-        /// 条件GroupBox非表示時のGrouBoxAreaの高さ
-        /// </summary>
-        public const HeightGbxAreasOnNotVisibleCondition = 348;
+        ///     ''' 条件GroupBox非表示時のGrouBoxAreaの高さ
+        ///     ''' </summary>
+        public const int HeightGbxAreasOnNotVisibleCondition = 348;
         /// <summary>
-        /// 件数 件
-        /// </summary>
-        private const Ken = "件";
+        ///     ''' 件数 件
+        ///     ''' </summary>
+        private const string Ken = "件";
         /// <summary>
-        /// 件数の初期表示
-        /// </summary>
-        private const ZeroKen = "0件";
+        ///     ''' 件数の初期表示
+        ///     ''' </summary>
+        private const string ZeroKen = "0件";
         /// <summary>
-        /// 日付初期値
-        /// </summary>
-        private const DayInitialValue = "__/__/__";
+        ///     ''' 日付初期値
+        ///     ''' </summary>
+        private const string DayInitialValue = "__/__/__";
         /// <summary>
-        /// 時間初期値
-        /// </summary>
-        private const TimeInitialValue = "__:__";
+        ///     ''' 時間初期値
+        ///     ''' </summary>
+        private const string TimeInitialValue = "__:__";
         /// <summary>
-        /// チェックインフラグ　乗車済み
-        /// </summary>
-        private const CheckinFlgJyosyaAlready = "1";
+        ///     ''' チェックインフラグ　乗車済み
+        ///     ''' </summary>
+        private const string CheckinFlgJyosyaAlready = "1";
         /// <summary>
-        /// チェックインフラグ　NOSHOW
-        /// </summary>
-        private const CheckinFlgNOSHOW = "2";
+        ///     ''' チェックインフラグ　NOSHOW
+        ///     ''' </summary>
+        private const string CheckinFlgNOSHOW = "2";
         /// <summary>
-        /// NOSHOWフラグ　"Y"
-        /// </summary>
-        private const NOSHOWFlg = "Y";
+        ///     ''' NOSHOWフラグ　"Y"
+        ///     ''' </summary>
+        private const string NOSHOWFlg = "Y";
         /// <summary>
-        /// 列名 乗車済み
-        /// </summary>
-        private const NameColJyosyaAlready = "colJyosyaAlready";
+        ///     ''' 列名 乗車済み
+        ///     ''' </summary>
+        private const string NameColJyosyaAlready = "colJyosyaAlready";
         /// <summary>
-        /// 列名 NOSHOW
-        /// </summary>
-        private const NameColNOSHOW = "colNOSHOW";
+        ///     ''' 列名 NOSHOW
+        ///     ''' </summary>
+        private const string NameColNOSHOW = "colNOSHOW";
         /// <summary>
-        /// 列名 請求対象
-        /// </summary>
-        private const NameColInquiry = "colInquiry";
+        ///     ''' 列名 請求対象
+        ///     ''' </summary>
+        private const string NameColInquiry = "colInquiry";
         /// <summary>
-        /// 状態　JTB発券
-        /// </summary>
-        private const StateJTB = "1";
+        ///     ''' 状態　JTB発券
+        ///     ''' </summary>
+        private const string StateJTB = "1";
         /// <summary>
-        /// 状態　KNT発券
-        /// </summary>
-        private const StateKNT = "3";
+        ///     ''' 状態　KNT発券
+        ///     ''' </summary>
+        private const string StateKNT = "3";
         /// <summary>
-        /// 前月
-        /// </summary>
-        private const BfMon = -1;
+        ///     ''' 前月
+        ///     ''' </summary>
+        private const int BfMon = -1;
         /// <summary>
-        /// 1日前
-        /// </summary>
-        private const OneDayBf = -1;
+        ///     ''' 1日前
+        ///     ''' </summary>
+        private const int OneDayBf = -1;
         /// <summary>
-        /// 状態　「消」
-        /// </summary>
-        private const StateCancel = "消";
+        ///     ''' 状態　「消」
+        ///     ''' </summary>
+        private const string StateCancel = "消";
         /// <summary>
-        /// 状態　「削」
-        /// </summary>
-        private const StateDelete = "削";
+        ///     ''' 状態　「削」
+        ///     ''' </summary>
+        private const string StateDelete = "削";
         /// <summary>
-        /// 状態　「指」
-        /// </summary>
-        private const StateReserve = "指";
+        ///     ''' 状態　「指」
+        ///     ''' </summary>
+        private const string StateReserve = "指";
         /// <summary>
-        /// 状態　「券」
-        /// </summary>
-        private const StateKen = "券";
+        ///     ''' 状態　「券」
+        ///     ''' </summary>
+        private const string StateKen = "券";
         /// <summary>
-        /// 検索結果最大表示件数件数
-        /// </summary>
+        ///     ''' 検索結果最大表示件数件数
+        ///     ''' </summary>
         public const int MaxKensu = 100;
 
         /// <summary>
-        /// ハッシュキー　システム日付（日付型)
-        /// </summary>
-        private const KeyDtSysDate = "dtSysDate";
+        ///     ''' ハッシュキー　システム日付（日付型)
+        ///     ''' </summary>
+        private const string KeyDtSysDate = "dtSysDate";
         /// <summary>
-        /// ハッシュキー　システム日付（文字列型)
-        /// </summary>
-        private const KeyStrSysDate = "strSysDate";
+        ///     ''' ハッシュキー　システム日付（文字列型)
+        ///     ''' </summary>
+        private const string KeyStrSysDate = "strSysDate";
         /// <summary>
-        /// ハッシュキー　システム日付（数値型)
-        /// </summary>
-        private const KeyIntSysDate = "intSysDate";
+        ///     ''' ハッシュキー　システム日付（数値型)
+        ///     ''' </summary>
+        private const string KeyIntSysDate = "intSysDate";
         /// <summary>
-        /// ハッシュキー　システム時刻（時分秒）（文字列型)
-        /// </summary>
-        private const KeyStrSysTimeHhMmSs = "strSysTimeHhMmSs";
+        ///     ''' ハッシュキー　システム時刻（時分秒）（文字列型)
+        ///     ''' </summary>
+        private const string KeyStrSysTimeHhMmSs = "strSysTimeHhMmSs";
         /// <summary>
-        /// ハッシュキー　システム時刻（時分秒）（数値型)
-        /// </summary>
-        private const KeyIntSysTimeHhMmSs = "intSysTimeHhMmSs";
+        ///     ''' ハッシュキー　システム時刻（時分秒）（数値型)
+        ///     ''' </summary>
+        private const string KeyIntSysTimeHhMmSs = "intSysTimeHhMmSs";
         /// <summary>
-        /// ハッシュキー　システム時刻（時分）（文字列型)
-        /// </summary>
-        private const KeyStrSysTimeHhMm = "strSysTimeHhMm";
+        ///     ''' ハッシュキー　システム時刻（時分）（文字列型)
+        ///     ''' </summary>
+        private const string KeyStrSysTimeHhMm = "strSysTimeHhMm";
         /// <summary>
-        /// ハッシュキー　システム時刻（時分）（数値型)
-        /// </summary>
-        private const KeyIntSysTimeHhMm = "intSysTimeHhMm";
+        ///     ''' ハッシュキー　システム時刻（時分）（数値型)
+        ///     ''' </summary>
+        private const string KeyIntSysTimeHhMm = "intSysTimeHhMm";
 
 
 
         /// <summary>
-        /// コース情報テーブル
-        /// </summary>
-        private DataTable _crsInfoTable = null;
+        ///     ''' コース情報テーブル
+        ///     ''' </summary>
+        private DataTable _crsInfoTable = null/* TODO Change to default(_) if this is not a reference type */;
         /// <summary>
-        /// 予約情報テーブル
-        /// </summary>
-        private DataTable _yoyakuInfoTable = null;
+        ///     ''' 予約情報テーブル
+        ///     ''' </summary>
+        private DataTable _yoyakuInfoTable = null/* TODO Change to default(_) if this is not a reference type */;
         /// <summary>
-        /// 検索用テーブル
-        /// </summary>
-        private Hashtable _searchForTable = null;
+        ///     ''' 検索用テーブル
+        ///     ''' </summary>
+        private Hashtable _searchForTable = null/* TODO Change to default(_) if this is not a reference type */;
         /// <summary>
-        /// 予約情報（基本）エンティティ
-        /// </summary>
+        ///     ''' 予約情報（基本）エンティティ
+        ///     ''' </summary>
         private YoyakuInfoBasicEntity _yoyakuInfoBasicEntity = new YoyakuInfoBasicEntity();
         /// <summary>
-        /// 精算情報エンティティ
-        /// </summary>
+        ///     ''' 精算情報エンティティ
+        ///     ''' </summary>
         private TSeisanInfoEntity _seisanInfoEntity = new TSeisanInfoEntity();
         /// <summary>
-        /// 判定用リスト
-        /// </summary>
+        ///     ''' 判定用リスト
+        ///     ''' </summary>
         private Hashtable _judgmentForList = new Hashtable();
         /// <summary>
-        /// チェックボックス解除フラグ
-        /// </summary>
+        ///     ''' チェックボックス解除フラグ
+        ///     ''' </summary>
         private bool _releaseFlg = false;
 
         /// <summary>
-        /// 条件GroupBoxの高さ
-        /// </summary>
+        ///     ''' 条件GroupBoxの高さ
+        ///     ''' </summary>
         private int _heightGbxCondition;
 
         /// <summary>
-        /// GroupBoxArea1の高さ
-        /// </summary>
+        ///     ''' GroupBoxArea1の高さ
+        ///     ''' </summary>
         private int _heightGbxArea1;
 
         /// <summary>
-        /// GroupBoxArea2の高さ
-        /// </summary>
+        ///     ''' GroupBoxArea2の高さ
+        ///     ''' </summary>
         private int _heightGbxArea2;
 
         /// <summary>
-        /// GroupBoxArea1のTop座標
-        /// </summary>
+        ///     ''' GroupBoxArea1のTop座標
+        ///     ''' </summary>
         private int _topGbxArea1;
 
         /// <summary>
-        /// GroupBoxArea2のTop座標
-        /// </summary>
+        ///     ''' GroupBoxArea2のTop座標
+        ///     ''' </summary>
         private int _topGbxArea2;
 
 
 
 
         /// <summary>
-        /// 条件GroupBoxの高さ
-        /// </summary>
-        /// <returns></returns>
+        ///     ''' 条件GroupBoxの高さ
+        ///     ''' </summary>
+        ///     ''' <returns></returns>
         public int HeightGbxCondition
         {
             get
@@ -215,9 +223,9 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 条件GroupBoxの表示/非表示
-        /// </summary>
-        /// <returns></returns>
+        ///     ''' 条件GroupBoxの表示/非表示
+        ///     ''' </summary>
+        ///     ''' <returns></returns>
         public bool VisibleGbxCondition
         {
             get
@@ -233,8 +241,8 @@ namespace Unkou
 
 
         /// <summary>
-        /// 画面起動時処理
-        /// </summary>
+        ///     ''' 画面起動時処理
+        ///     ''' </summary>
         protected override void StartupOrgProc()
         {
 
@@ -243,10 +251,10 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 条件GroupBox表示制御ボタン押下イベント
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        ///     ''' 条件GroupBox表示制御ボタン押下イベント
+        ///     ''' </summary>
+        ///     ''' <param name="sender"></param>
+        ///     ''' <param name="e"></param>
         private void btnVisiblerCondition_Click(object sender, EventArgs e)
         {
             this.VisibleGbxCondition = !this.VisibleGbxCondition;
@@ -275,22 +283,22 @@ namespace Unkou
         }
 
         /// <summary>
-        /// F2：戻るボタン押下イベント
-        /// </summary>
+        ///     ''' F2：戻るボタン押下イベント
+        ///     ''' </summary>
         protected override void btnF2_ClickOrgProc()
         {
             this.Close();
         }
 
         /// <summary>
-        /// キーダウン
-        /// </summary>
-        /// <remarks></remarks>
+        ///     ''' キーダウン
+        ///     ''' </summary>
+        ///     ''' <remarks></remarks>
         private void F8_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyData)
             {
-                case Keys.F8:
+                case object _ when Keys.F8:
                     {
                         this.btnSearch.Select();
                         base.btnCom_Click(this.btnSearch, e);
@@ -305,8 +313,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// F8：検索ボタン押下イベント
-        /// </summary>
+        ///     ''' F8：検索ボタン押下イベント
+        ///     ''' </summary>
         protected override void btnF8_ClickOrgProc()
         {
 
@@ -358,10 +366,10 @@ namespace Unkou
         }
 
         /// <summary>
-        /// F8：検索ボタン押下イベント
-        /// </summary>
-        /// <param name="sender">イベント送信元</param>
-        /// <param name="e">イベントデータ</param>
+        ///     ''' F8：検索ボタン押下イベント
+        ///     ''' </summary>
+        ///     ''' <param name="sender">イベント送信元</param>
+        ///     ''' <param name="e">イベントデータ</param>
         private void btnSearch_Click(object sender, EventArgs e)
         {
 
@@ -373,8 +381,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// F10：登録ボタン押下イベント
-        /// </summary>
+        ///     ''' F10：登録ボタン押下イベント
+        ///     ''' </summary>
         protected override void btnF10_ClickOrgProc()
         {
 
@@ -425,8 +433,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 条件クリアボタン押下時
-        /// </summary>
+        ///     ''' 条件クリアボタン押下時
+        ///     ''' </summary>
         protected override void btnCLEAR_ClickOrgProc()
         {
 
@@ -435,10 +443,10 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 条件クリアボタン押下時
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        ///     ''' 条件クリアボタン押下時
+        ///     ''' </summary>
+        ///     ''' <param name="sender"></param>
+        ///     ''' <param name="e"></param>
         protected void btnCLEAR_Click(object sender, EventArgs e)
         {
 
@@ -447,10 +455,10 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 代理店コードボタン押下イベント
-        /// </summary>
-        /// <param name="sender">イベント送信元</param>
-        /// <param name="e">イベントデータ</param>
+        ///     ''' 代理店コードボタン押下イベント
+        ///     ''' </summary>
+        ///     ''' <param name="sender">イベント送信元</param>
+        ///     ''' <param name="e">イベントデータ</param>
         private void btnGridRow_Click(object sender, C1.Win.C1FlexGrid.RowColEventArgs e)
         {
             try
@@ -520,11 +528,11 @@ namespace Unkou
         }
 
         /// <summary>
-        /// コースグリッドのチェックボックスの値が変更イベント
-        /// </summary>
-        /// <param name="sender">イベント送信元</param>
-        /// <param name="e">イベントデータ</param>
-        private void grdCrs_AfterEdit(object sender, C1.Win.C1FlexGrid.RowColEventArgs e)
+        ///     ''' コースグリッドのチェックボックスの値が変更イベント
+        ///     ''' </summary>
+        ///     ''' <param name="sender">イベント送信元</param>
+        ///     ''' <param name="e">イベントデータ</param>
+        private void grdCrs_AfterEdit(System.Object sender, C1.Win.C1FlexGrid.RowColEventArgs e)
         {
             try
             {
@@ -553,7 +561,7 @@ namespace Unkou
                 checkedInquiryYoyakuNoArray = new string[grdYoyaku.Rows.Count - 1 + 1];         // 請求対象
                 if (grdYoyaku.Rows.Count - 1 > 0)
                 {
-                    for (var ii = 1; ii <= grdYoyaku.Rows.Count - 1; ii += 1)
+                    for (string ii = 1; ii <= grdYoyaku.Rows.Count - 1; ii += 1)
                     {
                         // 乗車済み
                         if (System.Convert.ToBoolean(grdYoyaku.Rows(ii).Item("colJyosyaAlready")) == true)
@@ -595,12 +603,12 @@ namespace Unkou
                 // 新しく表示された予約と前回チェックされていた予約が等しい場合、該当列のチェックボックスをONにする
                 if (grdYoyaku.Rows.Count - 1 > 0)
                 {
-                    for (var ii = 1; ii <= grdYoyaku.Rows.Count - 1; ii += 1)
+                    for (string ii = 1; ii <= grdYoyaku.Rows.Count - 1; ii += 1)
                     {
                         // 乗車済み
                         if (checkedAlreadyJyosyaYoyakuNoArray.Count() > 0)
                         {
-                            for (var ArrayNum01 = 1; ArrayNum01 <= checkedAlreadyJyosyaYoyakuNoArray.Count() - 1; ArrayNum01 += 1)
+                            for (string ArrayNum01 = 1; ArrayNum01 <= checkedAlreadyJyosyaYoyakuNoArray.Count() - 1; ArrayNum01 += 1)
                             {
                                 // 乗車済みにチェックされていた行の予約番号と表示された予約一覧の予約番号を比較
                                 if (checkedAlreadyJyosyaYoyakuNoArray[ArrayNum01] != null && checkedAlreadyJyosyaYoyakuNoArray[ArrayNum01] == grdYoyaku.Rows(ii).Item("colYoyakuNo").ToString)
@@ -615,7 +623,7 @@ namespace Unkou
                         // NOSHOW
                         if (checkedNoShowYoyakuNoArray.Count() > 0)
                         {
-                            for (var ArrayNum02 = 1; ArrayNum02 <= checkedNoShowYoyakuNoArray.Count() - 1; ArrayNum02 += 1)
+                            for (string ArrayNum02 = 1; ArrayNum02 <= checkedNoShowYoyakuNoArray.Count() - 1; ArrayNum02 += 1)
                             {
                                 // NO SHOWにチェックされていた行の予約番号と表示された予約一覧の予約番号を比較
                                 if (checkedNoShowYoyakuNoArray[ArrayNum02] != null && checkedNoShowYoyakuNoArray[ArrayNum02] == grdYoyaku.Rows(ii).Item("colYoyakuNo").ToString)
@@ -630,7 +638,7 @@ namespace Unkou
                         // 代理店
                         if (inputAgentYoyakuNoArray.GetLength(0) > 0)
                         {
-                            for (var ArrayNum03 = 1; ArrayNum03 <= inputAgentYoyakuNoArray.GetLength(0) - 1; ArrayNum03 += 1)
+                            for (string ArrayNum03 = 1; ArrayNum03 <= inputAgentYoyakuNoArray.GetLength(0) - 1; ArrayNum03 += 1)
                             {
                                 // 代理店に入力されていた行の予約番号と表示された予約一覧の予約番号を比較
                                 if (inputAgentYoyakuNoArray[ArrayNum03, 0] != null && inputAgentYoyakuNoArray[ArrayNum03, 0] == grdYoyaku.Rows(ii).Item("colYoyakuNo").ToString)
@@ -646,7 +654,7 @@ namespace Unkou
                         // 請求対象
                         if (checkedInquiryYoyakuNoArray.Count() > 0)
                         {
-                            for (var ArrayNum04 = 1; ArrayNum04 <= checkedInquiryYoyakuNoArray.Count() - 1; ArrayNum04 += 1)
+                            for (string ArrayNum04 = 1; ArrayNum04 <= checkedInquiryYoyakuNoArray.Count() - 1; ArrayNum04 += 1)
                             {
                                 // 請求対象にチェックされていた行の予約番号と表示された予約一覧の予約番号を比較
                                 if (checkedInquiryYoyakuNoArray[ArrayNum04] != null && checkedInquiryYoyakuNoArray[ArrayNum04] == grdYoyaku.Rows(ii).Item("colYoyakuNo").ToString)
@@ -692,11 +700,11 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 予約グリッドのチェックボックスの値が変更イベント
-        /// </summary>
-        /// <param name="sender">イベント送信元</param>
-        /// <param name="e">イベントデータ</param>
-        private void grdYoyaku_AfterEdit(object sender, C1.Win.C1FlexGrid.RowColEventArgs e)
+        ///     ''' 予約グリッドのチェックボックスの値が変更イベント
+        ///     ''' </summary>
+        ///     ''' <param name="sender">イベント送信元</param>
+        ///     ''' <param name="e">イベントデータ</param>
+        private void grdYoyaku_AfterEdit(System.Object sender, C1.Win.C1FlexGrid.RowColEventArgs e)
         {
             try
             {
@@ -872,10 +880,10 @@ namespace Unkou
         }
 
         /// <summary>
-        /// コースグリッド全選択
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        ///     ''' コースグリッド全選択
+        ///     ''' </summary>
+        ///     ''' <param name="sender"></param>
+        ///     ''' <param name="e"></param>
         private void btnAllSelectionCrs_Click(object sender, EventArgs e)
         {
             string[] checkedAlreadyJyosyaYoyakuNoArray = null;
@@ -908,7 +916,7 @@ namespace Unkou
                 checkedInquiryYoyakuNoArray = new string[grdYoyaku.Rows.Count - 1 + 1];         // 請求対象
                 if (grdYoyaku.Rows.Count - 1 > 0)
                 {
-                    for (var ii = 1; ii <= grdYoyaku.Rows.Count - 1; ii += 1)
+                    for (string ii = 1; ii <= grdYoyaku.Rows.Count - 1; ii += 1)
                     {
                         // 乗車済み
                         if (System.Convert.ToBoolean(grdYoyaku.Rows(ii).Item("colJyosyaAlready")) == true)
@@ -950,12 +958,12 @@ namespace Unkou
                 // 新しく表示された予約と前回チェックされていた予約が等しい場合、該当列のチェックボックスをONにする
                 if (grdYoyaku.Rows.Count - 1 > 0)
                 {
-                    for (var ii = 1; ii <= grdYoyaku.Rows.Count - 1; ii += 1)
+                    for (string ii = 1; ii <= grdYoyaku.Rows.Count - 1; ii += 1)
                     {
                         // 乗車済み
                         if (checkedAlreadyJyosyaYoyakuNoArray.Count() > 0)
                         {
-                            for (var ArrayNum01 = 1; ArrayNum01 <= checkedAlreadyJyosyaYoyakuNoArray.Count() - 1; ArrayNum01 += 1)
+                            for (string ArrayNum01 = 1; ArrayNum01 <= checkedAlreadyJyosyaYoyakuNoArray.Count() - 1; ArrayNum01 += 1)
                             {
                                 // 乗車済みにチェックされていた行の予約番号と表示された予約一覧の予約番号を比較
                                 if (checkedAlreadyJyosyaYoyakuNoArray[ArrayNum01] != null && checkedAlreadyJyosyaYoyakuNoArray[ArrayNum01] == grdYoyaku.Rows(ii).Item("colYoyakuNo").ToString)
@@ -970,7 +978,7 @@ namespace Unkou
                         // NOSHOW
                         if (checkedNoShowYoyakuNoArray.Count() > 0)
                         {
-                            for (var ArrayNum02 = 1; ArrayNum02 <= checkedNoShowYoyakuNoArray.Count() - 1; ArrayNum02 += 1)
+                            for (string ArrayNum02 = 1; ArrayNum02 <= checkedNoShowYoyakuNoArray.Count() - 1; ArrayNum02 += 1)
                             {
                                 // NO SHOWにチェックされていた行の予約番号と表示された予約一覧の予約番号を比較
                                 if (checkedNoShowYoyakuNoArray[ArrayNum02] != null && checkedNoShowYoyakuNoArray[ArrayNum02] == grdYoyaku.Rows(ii).Item("colYoyakuNo").ToString)
@@ -985,7 +993,7 @@ namespace Unkou
                         // 代理店
                         if (inputAgentYoyakuNoArray.GetLength(0) > 0)
                         {
-                            for (var ArrayNum03 = 1; ArrayNum03 <= inputAgentYoyakuNoArray.GetLength(0) - 1; ArrayNum03 += 1)
+                            for (string ArrayNum03 = 1; ArrayNum03 <= inputAgentYoyakuNoArray.GetLength(0) - 1; ArrayNum03 += 1)
                             {
                                 // 代理店に入力されていた行の予約番号と表示された予約一覧の予約番号を比較
                                 if (inputAgentYoyakuNoArray[ArrayNum03, 0] != null && inputAgentYoyakuNoArray[ArrayNum03, 0] == grdYoyaku.Rows(ii).Item("colYoyakuNo").ToString)
@@ -1001,7 +1009,7 @@ namespace Unkou
                         // 請求対象
                         if (checkedInquiryYoyakuNoArray.Count() > 0)
                         {
-                            for (var ArrayNum04 = 1; ArrayNum04 <= checkedInquiryYoyakuNoArray.Count() - 1; ArrayNum04 += 1)
+                            for (string ArrayNum04 = 1; ArrayNum04 <= checkedInquiryYoyakuNoArray.Count() - 1; ArrayNum04 += 1)
                             {
                                 // 請求対象にチェックされていた行の予約番号と表示された予約一覧の予約番号を比較
                                 if (checkedInquiryYoyakuNoArray[ArrayNum04] != null && checkedInquiryYoyakuNoArray[ArrayNum04] == grdYoyaku.Rows(ii).Item("colYoyakuNo").ToString)
@@ -1043,10 +1051,10 @@ namespace Unkou
         }
 
         /// <summary>
-        /// コースグリッド全解除
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        ///     ''' コースグリッド全解除
+        ///     ''' </summary>
+        ///     ''' <param name="sender"></param>
+        ///     ''' <param name="e"></param>
         private void btnAllReleaseCrs_Click(object sender, EventArgs e)
         {
             try
@@ -1094,10 +1102,10 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 予約グリッド全選択
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        ///     ''' 予約グリッド全選択
+        ///     ''' </summary>
+        ///     ''' <param name="sender"></param>
+        ///     ''' <param name="e"></param>
         private void btnAllSelectionYoyaku_Click(object sender, EventArgs e)
         {
             try
@@ -1235,10 +1243,10 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 予約グリッド全解除
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        ///     ''' 予約グリッド全解除
+        ///     ''' </summary>
+        ///     ''' <param name="sender"></param>
+        ///     ''' <param name="e"></param>
         private void btnAllReleaseYoyaku_Click(object sender, EventArgs e)
         {
             try
@@ -1288,10 +1296,10 @@ namespace Unkou
         }
 
         /// <summary>
-        /// グリッドのデータソース変更時イベント
-        /// </summary>
-        /// <param name="sender">イベント送信元</param>
-        /// <param name="e">イベントデータ</param>
+        ///     ''' グリッドのデータソース変更時イベント
+        ///     ''' </summary>
+        ///     ''' <param name="sender">イベント送信元</param>
+        ///     ''' <param name="e">イベントデータ</param>
         private void grdCrs_AfterDataRefresh(object sender, ListChangedEventArgs e)
         {
             // データ件数を表示(ヘッダー行分マイナス1)
@@ -1301,8 +1309,8 @@ namespace Unkou
 
 
         /// <summary>
-        /// 画面初期化
-        /// </summary>
+        ///     ''' 画面初期化
+        ///     ''' </summary>
         private void setControlInitiarize()
         {
 
@@ -1336,8 +1344,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// フッタボタンの設定
-        /// </summary>
+        ///     ''' フッタボタンの設定
+        ///     ''' </summary>
         private void setButtonInitiarize()
         {
 
@@ -1361,8 +1369,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// コースグリッドの初期化
-        /// </summary>
+        ///     ''' コースグリッドの初期化
+        ///     ''' </summary>
         private void setGrdCrsInitiarize()
         {
             // グリッド部の初期表示
@@ -1376,8 +1384,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 予約グリッドの初期化
-        /// </summary>
+        ///     ''' 予約グリッドの初期化
+        ///     ''' </summary>
         private void setGrdYoyakuInitiarize()
         {
             // グリッド部の初期表示
@@ -1389,8 +1397,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 変数の初期化
-        /// </summary>
+        ///     ''' 変数の初期化
+        ///     ''' </summary>
         private void setVariableInitial()
         {
             _searchForTable = new Hashtable();
@@ -1403,8 +1411,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// GroupBoxのレイアウト保存
-        /// </summary>
+        ///     ''' GroupBoxのレイアウト保存
+        ///     ''' </summary>
         private void saveGrpLayout()
         {
             this.gbxCondition.Height = this.gbxCondition.Height;
@@ -1415,8 +1423,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// GroupBoxのレイアウト設定
-        /// </summary>
+        ///     ''' GroupBoxのレイアウト設定
+        ///     ''' </summary>
         private void setGrpLayout()
         {
             this.gbxCondition.Height = this.gbxCondition.Height;
@@ -1427,8 +1435,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 入力項目のチェック
-        /// </summary>
+        ///     ''' 入力項目のチェック
+        ///     ''' </summary>
         private bool isInputCheck()
         {
 
@@ -1502,8 +1510,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 入力項目のチェック(予約)
-        /// </summary>
+        ///     ''' 入力項目のチェック(予約)
+        ///     ''' </summary>
         private void isInputCheckYoyaku()
         {
             DateTime checkDate = default(DateTime);
@@ -1541,15 +1549,15 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 更新時のチェック処理
-        /// </summary>
+        ///     ''' 更新時のチェック処理
+        ///     ''' </summary>
         private void isUpdateCheck()
         {
         }
 
         /// <summary>
-        /// 検索用の値を格納
-        /// </summary>
+        ///     ''' 検索用の値を格納
+        ///     ''' </summary>
         private void setSerchForValue()
         {
             DateTime checkDate = default(DateTime);        // チェック用
@@ -1629,8 +1637,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// コース情報テーブルの取得
-        /// </summary>
+        ///     ''' コース情報テーブルの取得
+        ///     ''' </summary>
         private void getCrsInfoTable()
         {
             S04_0103Da s04_0103Da = new S04_0103Da();
@@ -1639,8 +1647,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 予約情報テーブルの取得
-        /// </summary>
+        ///     ''' 予約情報テーブルの取得
+        ///     ''' </summary>
         private DataTable getYoyakuInfoTable()
         {
             S04_0103Da s04_0103Da = new S04_0103Da();
@@ -1649,8 +1657,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// エンティティに値を格納
-        /// </summary>
+        ///     ''' エンティティに値を格納
+        ///     ''' </summary>
         private void setEntityData(DataRow dataRow, Hashtable sysdates)
         {
 
@@ -1752,8 +1760,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 使用中フラグをUseに設定
-        /// </summary>
+        ///     ''' 使用中フラグをUseに設定
+        ///     ''' </summary>
         private bool executeUsingFlgUse(Hashtable sysdates, DataRow dataRow)
         {
             S04_0103Da s04_0103Da = new S04_0103Da();
@@ -1776,8 +1784,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 使用中フラグをUnusedに設定
-        /// </summary>
+        ///     ''' 使用中フラグをUnusedに設定
+        ///     ''' </summary>
         private bool executeUsingFlgUnused()
         {
             S04_0103Da s04_0103Da = new S04_0103Da();
@@ -1789,8 +1797,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 予約と精算の更新
-        /// </summary>
+        ///     ''' 予約と精算の更新
+        ///     ''' </summary>
         private bool executeYoyakuSeisan(List<YoyakuInfoCrsChargeChargeKbnEntity> yoyakuInfoCrsChargeChargeKbnList)
         {
             S04_0103Da s04_0103Da = new S04_0103Da();
@@ -1839,8 +1847,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// エラーのクリア
-        /// </summary>
+        ///     ''' エラーのクリア
+        ///     ''' </summary>
         private void errorClear()
         {
             this.dtmSyuptDay.ExistError = false;
@@ -1854,8 +1862,8 @@ namespace Unkou
 
 
         /// <summary>
-        /// コースグリッドに値を格納
-        /// </summary>
+        ///     ''' コースグリッドに値を格納
+        ///     ''' </summary>
         private void setGrdCrs()
         {
 
@@ -1895,8 +1903,8 @@ namespace Unkou
 
 
         /// <summary>
-        /// 予約情報取得処理
-        /// </summary>
+        ///     ''' 予約情報取得処理
+        ///     ''' </summary>
         private void setYoyakuInfo()
         {
             _yoyakuInfoTable = new DataTable();
@@ -1930,7 +1938,7 @@ namespace Unkou
 
                 // DataViewを使用してDataTableの並び替えを行う
                 // 並び替える
-                var dv = new DataView(_yoyakuInfoTable);
+                string dv = new DataView(_yoyakuInfoTable);
                 // 昇順「姓」「名」
                 dv.Sort = "SURNAME, NAME";
 
@@ -1964,8 +1972,8 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 予約グリッドの設定
-        /// </summary>
+        ///     ''' 予約グリッドの設定
+        ///     ''' </summary>
         private void setGrdYoyaku()
         {
 
@@ -2057,9 +2065,9 @@ namespace Unkou
 
 
         /// <summary>
-        /// 予約情報(コース料金_料金区分）エンティティの設定
-        /// </summary>
-        /// <returns></returns>
+        ///     ''' 予約情報(コース料金_料金区分）エンティティの設定
+        ///     ''' </summary>
+        ///     ''' <returns></returns>
         private YoyakuInfoCrsChargeChargeKbnEntity createYoyakuInfoCrsChargeChargeKbnEntityForHakken(string yoyakuKbn, int yoyakuNo, Hashtable sysDates)
         {
             YoyakuInfoCrsChargeChargeKbnEntity ent = new YoyakuInfoCrsChargeChargeKbnEntity();
@@ -2080,9 +2088,9 @@ namespace Unkou
         }
 
         /// <summary>
-        /// 予約番号取得処理
-        /// </summary>
-        /// <returns></returns>
+        ///     ''' 予約番号取得処理
+        ///     ''' </summary>
+        ///     ''' <returns></returns>
         private Hashtable getYoyakuNo()
         {
             Hashtable yoyakuNo = new Hashtable();
@@ -2105,9 +2113,9 @@ namespace Unkou
         }
 
         /// <summary>
-        /// システム日付（各型）の取得
-        /// </summary>
-        /// <returns>各型のシステム日付を格納したHashTable</returns>
+        ///     ''' システム日付（各型）の取得
+        ///     ''' </summary>
+        ///     ''' <returns>各型のシステム日付を格納したHashTable</returns>
         private Hashtable getSysDates()
         {
 
@@ -2138,5 +2146,6 @@ namespace Unkou
             return sysDates;
         }
     }
+
 
 }

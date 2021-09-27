@@ -33,7 +33,7 @@ namespace Unkou
         //// </summary>
         protected override void btnF2_ClickOrgProc()
         {
-            this.Close()
+            this.Close();
         }
 
 #endregion

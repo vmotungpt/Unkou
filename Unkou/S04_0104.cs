@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Unkou.Common;
+using Unkou.Common.Interface;
 
 namespace Unkou
 {
@@ -30,53 +32,53 @@ namespace Unkou
         /// <summary>
         /// 精算方法_振込
         /// </summary>
-        private const strSeisanHohoHurikomi = "振込";
+        private const string strSeisanHohoHurikomi = "振込";
         /// <summary>
         /// 精算方法_営業所
         /// </summary>
-        private const strSeisanHohoEigyosyo = "営業所";
+        private const string strSeisanHohoEigyosyo = "営業所";
         /// <summary>
         /// 精算方法_当日払い
         /// </summary>
-        private const strSeisanHohoTojituPayment = "当日払い";
+        private const string strSeisanHohoTojituPayment = "当日払い";
         /// <summary>
         /// 精算方法_ＡＧＴ
         /// </summary>
-        private const strSeisanHohoAgt = "ＡＧＴ";
+        private const string strSeisanHohoAgt = "ＡＧＴ";
         /// <summary>
         /// 精算方法_カード
         /// </summary>
-        private const strSeisanHohoCard = "カード";
+        private const string strSeisanHohoCard = "カード";
 
         // 画面遷移用
         /// <summary>
         /// 列番号(グリッド) 予約区分
         /// </summary>
-        private const NoColYoyakuKbn = 6;
+        private const int NoColYoyakuKbn = 6;
         /// <summary>
         /// 列番号(グリッド) 予約NO
         /// </summary>
-        private const NoColYoyakuNo = 7;
+        private const int NoColYoyakuNo = 7;
 
         /// <summary>
         /// 条件GroupBoxのTop座標
         /// </summary>
-        public const TopGbxCondition = 41;
+        public const int TopGbxCondition = 41;
 
         /// <summary>
         /// 条件GroupBoxのマージン
         /// </summary>
-        public const MarginGbxCondition = 6;
+        public const int MarginGbxCondition = 6;
 
         /// <summary>
         /// 条件GroupBox非表示時のGroupBoxArea1の高さ
         /// </summary>
-        public const HeightGbxAreas1OnNotVisibleCondition = 272;
+        public const int HeightGbxAreas1OnNotVisibleCondition = 272;
 
         /// <summary>
         /// 条件GroupBox非表示時のGroupBoxArea2の高さ
         /// </summary>
-        public const HeightGbxAreas2OnNotVisibleCondition = 429;
+        public const int HeightGbxAreas2OnNotVisibleCondition = 429;
 
         /// <summary>
         /// 条件GroupBoxの高さ
