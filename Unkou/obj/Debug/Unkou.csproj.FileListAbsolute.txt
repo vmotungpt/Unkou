@@ -1,4 +1,0 @@
-C:\Users\VMO-TungPT\Desktop\Unkou\Unkou\obj\Debug\Unkou.csprojAssemblyReference.cache
-C:\Users\VMO-TungPT\Desktop\Unkou\Unkou\obj\Debug\Unkou.Properties.Resources.resources
-C:\Users\VMO-TungPT\Desktop\Unkou\Unkou\obj\Debug\Unkou.csproj.GenerateResource.cache
-C:\Users\VMO-TungPT\Desktop\Unkou\Unkou\obj\Debug\Unkou.csproj.CoreCompileInputs.cache
